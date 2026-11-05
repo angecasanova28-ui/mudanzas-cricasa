@@ -67,7 +67,7 @@ export const COMPANY_CONFIG: CompanyInfo = {
     defaultMessage:
       "Hola Mudanzas CRICASA, estoy en su sitio web y deseo solicitar información y asesoramiento para una mudanza.",
   },
-  email: "contacto@mudanzascricasa.com",
+  email: "cricasa78@hotmail.com",
   hours: "Lunes a Sábado de 08:00 a 19:00 hs",
   addressSummary: "Funes, Santa Fe y alrededores",
   social: {
