@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CSS backup (creado durante el build de producción)
+app/globals.css.dev-backup

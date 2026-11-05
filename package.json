@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "node scripts/build-css.mjs && next build --webpack && node scripts/restore-css.mjs",
+    "build:css": "node scripts/build-css.mjs",
+    "restore:css": "node scripts/restore-css.mjs",
     "start": "next start",
     "lint": "eslint"
   },
