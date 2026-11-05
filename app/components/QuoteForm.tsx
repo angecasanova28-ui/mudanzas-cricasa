@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { MessageSquare, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
-import { SERVICES_DATA, COMPANY_CONFIG } from "../config/company";
+import { COMPANY_CONFIG } from "../config/company";
 import { buildWhatsAppQuoteUrl, QuoteFormData } from "../config/whatsapp";
+import { useLanguage } from "../context/LanguageContext";
 
 interface FormErrors {
   fullName?: string;
@@ -14,9 +15,11 @@ interface FormErrors {
 }
 
 export const QuoteForm: React.FC = () => {
+  const { t, language } = useLanguage();
+
   const [formData, setFormData] = useState<QuoteFormData>({
     fullName: "",
-    serviceType: SERVICES_DATA[0].title,
+    serviceType: t.services.items[0]?.title || "",
     originLocation: "",
     destinationLocation: "",
     estimatedDate: "",
@@ -30,25 +33,25 @@ export const QuoteForm: React.FC = () => {
     const newErrors: FormErrors = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.fullName = "Por favor, ingrese su nombre y apellido.";
+      newErrors.fullName = t.quote.errors.fullNameRequired;
     } else if (formData.fullName.trim().length < 3) {
-      newErrors.fullName = "El nombre debe tener al menos 3 caracteres.";
+      newErrors.fullName = t.quote.errors.fullNameLength;
     }
 
     if (!formData.serviceType.trim()) {
-      newErrors.serviceType = "Seleccione el tipo de servicio requerido.";
+      newErrors.serviceType = t.quote.errors.serviceTypeRequired;
     }
 
     if (!formData.originLocation.trim()) {
-      newErrors.originLocation = "Indique la localidad o barrio de origen.";
+      newErrors.originLocation = t.quote.errors.originRequired;
     }
 
     if (!formData.destinationLocation.trim()) {
-      newErrors.destinationLocation = "Indique la localidad o barrio de destino.";
+      newErrors.destinationLocation = t.quote.errors.destinationRequired;
     }
 
     if (!formData.estimatedDate.trim()) {
-      newErrors.estimatedDate = "Seleccione una fecha estimada para el traslado.";
+      newErrors.estimatedDate = t.quote.errors.dateRequired;
     }
 
     setErrors(newErrors);
@@ -79,273 +82,264 @@ export const QuoteForm: React.FC = () => {
       return;
     }
 
-    const waUrl = buildWhatsAppQuoteUrl(formData);
+    const whatsappUrl = buildWhatsAppQuoteUrl(formData);
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     setSubmitted(true);
-    window.open(waUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const resetForm = () => {
+    setFormData({
+      fullName: "",
+      serviceType: t.services.items[0]?.title || "",
+      originLocation: "",
+      destinationLocation: "",
+      estimatedDate: "",
+      additionalNotes: "",
+    });
+    setSubmitted(false);
   };
 
   return (
-    <section id="presupuesto" className="py-24 lg:py-32 bg-[#101010] text-white relative overflow-hidden border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Columna Informativa de Conversión */}
+    <section id="presupuesto" className="py-24 lg:py-32 bg-[#F4F4F4] text-[#101010] border-b border-neutral-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          
+          {/* Columna Informativa */}
           <div className="lg:col-span-5">
-            <span className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-3 block font-body">
-              Atención Directa
+            <span className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-3 block font-body">
+              {t.quote.badge}
             </span>
-
-            <h2 className="font-display text-4xl sm:text-6xl lg:text-7xl text-white tracking-wide uppercase leading-tight mb-6">
-              SOLICITÁ TU PRESUPUESTO <br />
-              <span className="text-neutral-400">POR WHATSAPP.</span>
+            <h2 className="font-display text-4xl sm:text-6xl text-[#101010] tracking-wide uppercase leading-tight mb-6">
+              {t.quote.titleMain} <br />
+              <span className="text-neutral-500">{t.quote.titleHighlight}</span>
             </h2>
 
-            <p className="font-body text-neutral-300 text-base sm:text-lg leading-relaxed mb-8">
-              Completá los datos básicos del traslado para generar tu consulta detallada y recibir una cotización directa y personalizada de Mudanzas CRICASA.
+            <p className="font-body text-neutral-600 text-base leading-relaxed mb-8">
+              {t.quote.subtitle}
             </p>
 
+            {/* Beneficios directos de cotizar con CRICASA */}
             <div className="space-y-4 mb-8 font-body">
-              <div className="flex items-start gap-3.5">
-                <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0 mt-0.5">
-                  <CheckCircle2 className="w-4 h-4 text-white" />
+              {t.quote.features.map((feature, fIdx) => (
+                <div key={fIdx} className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-sm font-medium text-neutral-700">{feature}</span>
                 </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Respuesta Directa</h4>
-                  <p className="text-xs text-neutral-400 mt-0.5">
-                    Evaluamos volumen, pisos y distancias para responderle a la brevedad.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0 mt-0.5">
-                  <CheckCircle2 className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Sin Intermediarios</h4>
-                  <p className="text-xs text-neutral-400 mt-0.5">
-                    Comunicación directa con los responsables operativos de CRICASA.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5">
-                <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0 mt-0.5">
-                  <CheckCircle2 className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Claridad Total</h4>
-                  <p className="text-xs text-neutral-400 mt-0.5">
-                    Presupuesto pactado previamente sin costos imprevistos.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
 
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-xs text-neutral-400 font-body">
-              <span className="text-white font-bold block mb-1 uppercase tracking-wider">
-                ¿Prefiere llamar telefónicamente?
+            {/* Bloque de Contacto Directo */}
+            <div className="p-6 rounded-2xl bg-white border border-neutral-200 shadow-sm font-body">
+              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-2">
+                {language === "es" ? "Atención telefónica directa" : "Direct Phone Contact"}
               </span>
-              Línea directa para coordinar mudanzas:{" "}
-              <a
-                href={`tel:${COMPANY_CONFIG.phone.raw}`}
-                className="text-white font-bold underline hover:text-neutral-200"
-              >
-                {COMPANY_CONFIG.phone.display}
-              </a>
-              .
-            </div>
-          </div>
-
-          {/* Formulario en Fondo Blanco Puro con Máximo Contraste */}
-          <div className="lg:col-span-7">
-            <div className="bg-white text-[#101010] rounded-2xl p-7 sm:p-10 shadow-2xl border border-neutral-200">
-              <div className="mb-6">
-                <h3 className="font-display text-2xl sm:text-3xl text-[#101010] uppercase tracking-wide">
-                  Formulario de Consulta
-                </h3>
-                <p className="text-xs text-neutral-500 mt-1 font-body">
-                  Complete los datos requeridos para estructurar su presupuesto.
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <a
+                    href={`tel:${COMPANY_CONFIG.phone.raw}`}
+                    className="font-display text-3xl text-black hover:text-neutral-700 transition-colors tracking-wide"
+                  >
+                    {COMPANY_CONFIG.phone.display}
+                  </a>
+                  <span className="text-xs text-neutral-500 block mt-0.5">
+                    {COMPANY_CONFIG.hours}
+                  </span>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-[#F4F4F4] flex items-center justify-center text-black">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
               </div>
-
-              {submitted && (
-                <div className="mb-6 p-4 rounded-xl bg-neutral-100 border border-neutral-300 text-black text-xs font-body flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold block">¡Consulta enviada a WhatsApp!</span>
-                    Se ha abierto una conversación en WhatsApp con los datos de su mudanza. Si no abrió, presione nuevamente el botón.
-                  </div>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} noValidate className="space-y-4 font-body">
-                {/* Nombre Completo */}
-                <div>
-                  <label htmlFor="fullName" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                    Nombre y Apellido *
-                  </label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    placeholder="Ej. Juan Pérez"
-                    className={`w-full px-4 py-3 rounded-lg border text-sm text-black focus:outline-none focus:ring-1 transition-all ${
-                      errors.fullName
-                        ? "border-red-500 focus:ring-red-400 bg-red-50/20"
-                        : "border-neutral-300 focus:border-black focus:ring-black bg-[#FAFAFA]"
-                    }`}
-                  />
-                  {errors.fullName && (
-                    <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{errors.fullName}</span>
-                    </p>
-                  )}
-                </div>
-
-                {/* Tipo de Servicio */}
-                <div>
-                  <label htmlFor="serviceType" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                    Tipo de Servicio *
-                  </label>
-                  <select
-                    id="serviceType"
-                    name="serviceType"
-                    value={formData.serviceType}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-lg border text-sm text-black focus:outline-none focus:ring-1 transition-all ${
-                      errors.serviceType
-                        ? "border-red-500 focus:ring-red-400 bg-red-50/20"
-                        : "border-neutral-300 focus:border-black focus:ring-black bg-[#FAFAFA]"
-                    }`}
-                  >
-                    {SERVICES_DATA.map((s) => (
-                      <option key={s.id} value={s.title}>
-                        {s.title}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.serviceType && (
-                    <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{errors.serviceType}</span>
-                    </p>
-                  )}
-                </div>
-
-                {/* Localidades: Origen y Destino */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="originLocation" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                      Localidad de Origen *
-                    </label>
-                    <input
-                      type="text"
-                      id="originLocation"
-                      name="originLocation"
-                      value={formData.originLocation}
-                      onChange={handleChange}
-                      placeholder="Ej. Belgrano / Palermo"
-                      className={`w-full px-4 py-3 rounded-lg border text-sm text-black focus:outline-none focus:ring-1 transition-all ${
-                        errors.originLocation
-                          ? "border-red-500 focus:ring-red-400 bg-red-50/20"
-                          : "border-neutral-300 focus:border-black focus:ring-black bg-[#FAFAFA]"
-                      }`}
-                    />
-                    {errors.originLocation && (
-                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>{errors.originLocation}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="destinationLocation" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                      Localidad de Destino *
-                    </label>
-                    <input
-                      type="text"
-                      id="destinationLocation"
-                      name="destinationLocation"
-                      value={formData.destinationLocation}
-                      onChange={handleChange}
-                      placeholder="Ej. Vicente López / Ramos Mejía"
-                      className={`w-full px-4 py-3 rounded-lg border text-sm text-black focus:outline-none focus:ring-1 transition-all ${
-                        errors.destinationLocation
-                          ? "border-red-500 focus:ring-red-400 bg-red-50/20"
-                          : "border-neutral-300 focus:border-black focus:ring-black bg-[#FAFAFA]"
-                      }`}
-                    />
-                    {errors.destinationLocation && (
-                      <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>{errors.destinationLocation}</span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Fecha Estimada */}
-                <div>
-                  <label htmlFor="estimatedDate" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                    Fecha Estimada de la Mudanza *
-                  </label>
-                  <input
-                    type="date"
-                    id="estimatedDate"
-                    name="estimatedDate"
-                    value={formData.estimatedDate}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-lg border text-sm text-black focus:outline-none focus:ring-1 transition-all ${
-                      errors.estimatedDate
-                        ? "border-red-500 focus:ring-red-400 bg-red-50/20"
-                        : "border-neutral-300 focus:border-black focus:ring-black bg-[#FAFAFA]"
-                    }`}
-                  />
-                  {errors.estimatedDate && (
-                    <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                      <AlertCircle className="w-3.5 h-3.5" />
-                      <span>{errors.estimatedDate}</span>
-                    </p>
-                  )}
-                </div>
-
-                {/* Detalles adicionales / Notas */}
-                <div>
-                  <label htmlFor="additionalNotes" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-                    Detalles Adicionales (Opcional)
-                  </label>
-                  <textarea
-                    id="additionalNotes"
-                    name="additionalNotes"
-                    rows={2}
-                    value={formData.additionalNotes}
-                    onChange={handleChange}
-                    placeholder="Ej. Cantidad de ambientes, pisos por escalera o necesidad de izaje..."
-                    className="w-full px-4 py-2.5 rounded-lg border border-neutral-300 text-sm text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black resize-none bg-[#FAFAFA]"
-                  />
-                </div>
-
-                {/* Botón de Envío: Fondo Negro Sólido, Letras Blancas, Elegante y de Alto Contraste */}
-                <div className="pt-3">
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-black hover:bg-neutral-800 text-white font-extrabold text-xs uppercase tracking-widest shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
-                  >
-                    <MessageSquare className="w-4 h-4 text-white" />
-                    <span>Solicitar presupuesto por WhatsApp</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
-                  <p className="text-[11px] text-neutral-400 text-center mt-2.5">
-                    Se abrirá WhatsApp con el mensaje estructurado de Mudanzas CRICASA listo para enviar.
-                  </p>
-                </div>
-              </form>
             </div>
           </div>
+
+          {/* Columna Formulario */}
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-2xl p-8 sm:p-10 shadow-xl border border-neutral-200 font-body">
+              {submitted ? (
+                <div className="text-center py-10">
+                  <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="font-display text-3xl text-[#101010] uppercase mb-3">
+                    {t.quote.successTitle}
+                  </h3>
+                  <p className="text-sm text-neutral-600 max-w-md mx-auto mb-8">
+                    {t.quote.successDesc}
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a
+                      href={buildWhatsAppQuoteUrl(formData)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>{t.quote.openWhatsAppBtn}</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl border border-neutral-300 text-neutral-700 text-xs font-bold uppercase tracking-wider hover:bg-neutral-50 transition-colors"
+                    >
+                      {t.quote.sendAnotherBtn}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} noValidate className="space-y-6">
+                  {/* Nombre Completo */}
+                  <div>
+                    <label htmlFor="fullName" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                      {t.quote.fullNameLabel}
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      placeholder={t.quote.fullNamePlaceholder}
+                      className={`w-full px-4 py-3.5 rounded-xl bg-[#F8F8F8] border text-sm text-[#101010] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black transition-all ${
+                        errors.fullName ? "border-red-500 bg-red-50/20" : "border-neutral-200"
+                      }`}
+                    />
+                    {errors.fullName && (
+                      <p className="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        <span>{errors.fullName}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Tipo de Servicio */}
+                  <div>
+                    <label htmlFor="serviceType" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                      {t.quote.serviceTypeLabel}
+                    </label>
+                    <select
+                      id="serviceType"
+                      name="serviceType"
+                      value={formData.serviceType}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3.5 rounded-xl bg-[#F8F8F8] border border-neutral-200 text-sm text-[#101010] focus:outline-none focus:ring-2 focus:ring-black transition-all"
+                    >
+                      {t.services.items.map((svc) => (
+                        <option key={svc.id} value={svc.title}>
+                          {svc.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Origen y Destino */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="originLocation" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                        {t.quote.originLabel}
+                      </label>
+                      <input
+                        type="text"
+                        id="originLocation"
+                        name="originLocation"
+                        value={formData.originLocation}
+                        onChange={handleChange}
+                        placeholder={t.quote.originPlaceholder}
+                        className={`w-full px-4 py-3.5 rounded-xl bg-[#F8F8F8] border text-sm text-[#101010] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black transition-all ${
+                          errors.originLocation ? "border-red-500 bg-red-50/20" : "border-neutral-200"
+                        }`}
+                      />
+                      {errors.originLocation && (
+                        <p className="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>{errors.originLocation}</span>
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label htmlFor="destinationLocation" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                        {t.quote.destinationLabel}
+                      </label>
+                      <input
+                        type="text"
+                        id="destinationLocation"
+                        name="destinationLocation"
+                        value={formData.destinationLocation}
+                        onChange={handleChange}
+                        placeholder={t.quote.destinationPlaceholder}
+                        className={`w-full px-4 py-3.5 rounded-xl bg-[#F8F8F8] border text-sm text-[#101010] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black transition-all ${
+                          errors.destinationLocation ? "border-red-500 bg-red-50/20" : "border-neutral-200"
+                        }`}
+                      />
+                      {errors.destinationLocation && (
+                        <p className="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>{errors.destinationLocation}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Fecha Estimada */}
+                  <div>
+                    <label htmlFor="estimatedDate" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                      {t.quote.dateLabel}
+                    </label>
+                    <input
+                      type="date"
+                      id="estimatedDate"
+                      name="estimatedDate"
+                      value={formData.estimatedDate}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 rounded-xl bg-[#F8F8F8] border text-sm text-[#101010] focus:outline-none focus:ring-2 focus:ring-black transition-all ${
+                        errors.estimatedDate ? "border-red-500 bg-red-50/20" : "border-neutral-200"
+                      }`}
+                    />
+                    {errors.estimatedDate && (
+                      <p className="text-xs text-red-600 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        <span>{errors.estimatedDate}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Detalles adicionales */}
+                  <div>
+                    <label htmlFor="additionalNotes" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
+                      {t.quote.notesLabel}
+                    </label>
+                    <textarea
+                      id="additionalNotes"
+                      name="additionalNotes"
+                      rows={3}
+                      value={formData.additionalNotes}
+                      onChange={handleChange}
+                      placeholder={t.quote.notesPlaceholder}
+                      className="w-full px-4 py-3 rounded-xl bg-[#F8F8F8] border border-neutral-200 text-sm text-[#101010] placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-black transition-all resize-none"
+                    />
+                  </div>
+
+                  {/* Botón de Envío */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-black hover:bg-neutral-800 text-white font-extrabold text-sm uppercase tracking-wider transition-all duration-200 shadow-xl shadow-black/10 transform hover:-translate-y-0.5 cursor-pointer"
+                    >
+                      <span>{t.quote.submitBtn}</span>
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </button>
+                    <p className="text-center text-[11px] text-neutral-400 mt-3 leading-snug">
+                      {t.quote.privacyNote}
+                    </p>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

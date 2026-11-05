@@ -3,18 +3,21 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
-
-const navLinks = [
-  { name: "Inicio", href: "#hero" },
-  { name: "Servicios", href: "#servicios" },
-  { name: "Nosotros", href: "#nosotros" },
-  { name: "Cobertura", href: "#cobertura" },
-  { name: "Contacto", href: "#contacto" },
-];
+import { LanguageSwitch } from "./LanguageSwitch";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { name: t.nav.home, href: "#hero" },
+    { name: t.nav.services, href: "#servicios" },
+    { name: t.nav.about, href: "#nosotros" },
+    { name: t.nav.coverage, href: "#cobertura" },
+    { name: t.nav.contact, href: "#contacto" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,26 +64,30 @@ export const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Botón blanco 'Solicitar presupuesto' a la derecha */}
-          <div className="hidden lg:flex items-center">
+          {/* Selector de idioma ES/EN y Botón a la derecha */}
+          <div className="hidden lg:flex items-center gap-4">
+            <LanguageSwitch />
+
             <a
               href="#presupuesto"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-extrabold uppercase tracking-wider transition-all duration-200 shadow-md transform hover:-translate-y-0.5"
             >
-              <span>Solicitar presupuesto</span>
+              <span>{t.nav.quoteBtn}</span>
               <ArrowRight className="w-3.5 h-3.5 text-black" />
             </a>
           </div>
 
-          {/* Menú móvil */}
-          <div className="flex items-center md:hidden">
+          {/* Menú móvil y Selector de idioma en responsive */}
+          <div className="flex items-center gap-3 md:hidden">
+            <LanguageSwitch />
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
               className="inline-flex items-center justify-center p-2 rounded-lg text-neutral-300 hover:text-white hover:bg-neutral-800 focus:outline-none"
               aria-controls="mobile-menu"
               aria-expanded={isOpen}
-              aria-label={isOpen ? "Cerrar menú" : "Abrir menú de navegación"}
+              aria-label={isOpen ? t.nav.closeMenu : t.nav.openMenu}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -111,7 +118,7 @@ export const Navbar: React.FC = () => {
               onClick={closeMenu}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-white text-black text-xs font-bold uppercase tracking-wider text-center shadow"
             >
-              <span>Solicitar presupuesto</span>
+              <span>{t.nav.quoteBtn}</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

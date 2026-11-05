@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { LanguageProvider } from "./context/LanguageContext";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -46,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth bg-[#101010]">
       <body className="bg-[#101010] text-[#111111] font-sans antialiased selection:bg-white selection:text-black">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

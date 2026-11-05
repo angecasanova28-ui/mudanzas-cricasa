@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { buildWhatsAppGeneralUrl } from "../config/whatsapp";
+import { useLanguage } from "../context/LanguageContext";
 
 export const WhatsAppButton: React.FC = () => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,10 +28,10 @@ export const WhatsAppButton: React.FC = () => {
         <div className="mb-2 max-w-xs bg-[#101010] text-white rounded-xl shadow-2xl border border-white/20 p-3.5 flex items-start gap-2.5 transition-all duration-300">
           <div className="flex-1 font-body">
             <span className="font-display text-base text-white tracking-wide block uppercase leading-none">
-              Mudanzas CRICASA
+              {t.whatsappButton.tooltipTitle}
             </span>
             <p className="text-[11px] text-neutral-300 mt-1 leading-snug">
-              ¿Tiene dudas sobre su mudanza? Escríbanos para recibir asesoramiento rápido.
+              {t.whatsappButton.tooltipDesc}
             </p>
           </div>
           <button
@@ -47,10 +49,10 @@ export const WhatsAppButton: React.FC = () => {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Contactar a Mudanzas CRICASA por WhatsApp"
+        aria-label={t.whatsappButton.ariaLabel}
         className="group relative flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_6px_24px_rgba(37,211,102,0.6)] transition-all duration-300 transform hover:scale-108 focus:outline-none focus:ring-4 focus:ring-[#25D366]/30 border border-white/20"
       >
-        <span className="sr-only">Contactar a Mudanzas CRICASA por WhatsApp</span>
+        <span className="sr-only">{t.whatsappButton.ariaLabel}</span>
         
         {/* Logo oficial de WhatsApp en SVG vectorial nítido */}
         <svg

@@ -1,9 +1,14 @@
+"use client";
+
 import React from "react";
 import { ArrowRight, Shield, Award, Phone } from "lucide-react";
 import { COMPANY_CONFIG } from "../config/company";
 import { TruckFloating } from "./TruckFloating";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Hero: React.FC = () => {
+  const { t, language } = useLanguage();
+
   return (
     <section
       id="hero"
@@ -21,18 +26,18 @@ export const Hero: React.FC = () => {
             {/* Tagline superior */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 text-neutral-300 text-xs font-medium tracking-wider uppercase mb-5">
               <Award className="w-3.5 h-3.5 text-neutral-400" />
-              <span>30 años de experiencia y trayectoria</span>
+              <span>{t.hero.badge}</span>
             </div>
 
-            {/* Título Monumental: "Tu mudanza, en buenas manos." */}
+            {/* Título Monumental */}
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-white tracking-wide uppercase leading-[0.95] mb-5">
-              TU MUDANZA, <br />
-              <span className="text-neutral-400">EN BUENAS MANOS.</span>
+              {t.hero.titleMain} <br />
+              <span className="text-neutral-400">{t.hero.titleHighlight}</span>
             </h1>
 
-            {/* Descripción exacta solicitada */}
+            {/* Descripción */}
             <p className="font-body text-base sm:text-lg text-neutral-300 font-normal leading-relaxed mb-8 max-w-xl">
-              Más de 30 años acompañando mudanzas con experiencia, compromiso y cuidado en cada traslado.
+              {t.hero.description}
             </p>
 
             {/* Botones de acción */}
@@ -42,7 +47,7 @@ export const Hero: React.FC = () => {
                 href="#presupuesto"
                 className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-white hover:bg-neutral-200 text-black font-extrabold text-sm uppercase tracking-wider transition-all duration-200 shadow-xl shadow-white/5 transform hover:-translate-y-0.5"
               >
-                <span>Solicitar presupuesto</span>
+                <span>{t.hero.quoteBtn}</span>
                 <ArrowRight className="w-4 h-4 text-black" />
               </a>
 
@@ -51,7 +56,7 @@ export const Hero: React.FC = () => {
                 href="#servicios"
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-transparent hover:bg-white/5 text-white border border-white/20 hover:border-white/40 font-semibold text-sm uppercase tracking-wider transition-all duration-200"
               >
-                <span>Conocer nuestros servicios</span>
+                <span>{t.hero.servicesBtn}</span>
               </a>
             </div>
 
@@ -59,21 +64,21 @@ export const Hero: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 pt-6 border-t border-white/10 w-full text-xs text-neutral-400 font-body">
               <div>
                 <span className="font-display text-2xl text-white block leading-none mb-1">
-                  +30 AÑOS
+                  {t.hero.stats.yearsNumber}
                 </span>
-                <span>Trayectoria real</span>
+                <span>{t.hero.stats.yearsLabel}</span>
               </div>
               <div>
                 <span className="font-display text-2xl text-white block leading-none mb-1">
-                  100% DIRECTO
+                  {t.hero.stats.directNumber}
                 </span>
-                <span>Cotización por WhatsApp</span>
+                <span>{t.hero.stats.directLabel}</span>
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <span className="font-display text-2xl text-white block leading-none mb-1">
-                  FAMILIAR
+                  {t.hero.stats.familyNumber}
                 </span>
-                <span>Base en Funes, Santa Fe</span>
+                <span>{t.hero.stats.familyLabel}</span>
               </div>
             </div>
           </div>
@@ -94,21 +99,25 @@ export const Hero: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <h3 className="font-display text-sm sm:text-base text-white m-0 tracking-wide uppercase">
-                      CUIDADO Y SEGURIDAD
+                      {language === "es" ? "CUIDADO Y SEGURIDAD" : "CARE & SECURITY"}
                     </h3>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 bg-white/5 px-2 py-0.5 rounded border border-white/10">
-                      Flota Propia
+                      {language === "es" ? "Flota Propia" : "Dedicated Fleet"}
                     </span>
                   </div>
                   <p className="text-[11px] text-neutral-400 mt-0.5 font-body leading-snug">
-                    Unidades equipadas con sujeción y mantas protectoras. Personal con oficio real.
+                    {language === "es"
+                      ? "Unidades equipadas con sujeción y mantas protectoras. Personal con oficio real."
+                      : "Vehicles equipped with tie-downs and protective blankets. Truly skilled movers."}
                   </p>
                 </div>
               </div>
 
               {/* Teléfono directo */}
               <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-neutral-400 font-body">
-                <span>Atención telefónica directa:</span>
+                <span>
+                  {language === "es" ? "Atención telefónica directa:" : "Direct telephone line:"}
+                </span>
                 <a
                   href={`tel:${COMPANY_CONFIG.phone.raw}`}
                   className="font-bold text-white hover:underline flex items-center gap-1"

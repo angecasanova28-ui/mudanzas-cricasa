@@ -1,10 +1,14 @@
+"use client";
+
 import React from "react";
 import { Phone, Mail, Clock, MessageSquare, ArrowUpRight } from "lucide-react";
 import { COMPANY_CONFIG } from "../config/company";
 import { Logo } from "./Logo";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Footer: React.FC = () => {
   const currentYear = 2026;
+  const { t } = useLanguage();
 
   return (
     <footer id="contacto" className="bg-[#101010] text-neutral-300 border-t border-white/10">
@@ -14,49 +18,49 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 space-y-4">
             <Logo variant="dark" size="md" />
             <p className="font-body text-sm text-neutral-400 max-w-sm leading-relaxed mt-4">
-              Más de 30 años acompañando traslados con dedicación, seriedad y el máximo cuidado en cada detalle. Su mudanza, en buenas manos.
+              {t.footer.tagline}
             </p>
 
             <div className="pt-2 text-xs text-neutral-400 flex items-center gap-2 font-body">
               <Clock className="w-4 h-4 text-neutral-400" />
-              <span>{COMPANY_CONFIG.hours}</span>
+              <span>{t.footer.hours}</span>
             </div>
           </div>
 
           {/* Columna Enlaces de Navegación */}
           <div className="lg:col-span-3 space-y-3 font-body">
             <h4 className="font-display text-xl text-white uppercase tracking-wider mb-4">
-              Navegación
+              {t.footer.navTitle}
             </h4>
             <ul className="space-y-2.5 text-xs font-semibold uppercase tracking-wider text-neutral-400">
               <li>
                 <a href="#hero" className="hover:text-white transition-colors">
-                  Inicio
+                  {t.nav.home}
                 </a>
               </li>
               <li>
                 <a href="#servicios" className="hover:text-white transition-colors">
-                  Servicios
+                  {t.nav.services}
                 </a>
               </li>
               <li>
                 <a href="#nosotros" className="hover:text-white transition-colors">
-                  Nosotros
+                  {t.nav.about}
                 </a>
               </li>
               <li>
                 <a href="#cobertura" className="hover:text-white transition-colors">
-                  Cobertura
+                  {t.nav.coverage}
                 </a>
               </li>
               <li>
                 <a href="#galeria" className="hover:text-white transition-colors">
-                  Galería
+                  {t.gallery.badge}
                 </a>
               </li>
               <li>
                 <a href="#presupuesto" className="hover:text-white transition-colors">
-                  Presupuesto
+                  {t.nav.quoteBtn}
                 </a>
               </li>
             </ul>
@@ -65,7 +69,7 @@ export const Footer: React.FC = () => {
           {/* Columna Contacto */}
           <div className="lg:col-span-4 space-y-4 font-body">
             <h4 className="font-display text-xl text-white uppercase tracking-wider mb-4">
-              Atención Directa
+              {t.footer.contactTitle}
             </h4>
 
             {/* Teléfono */}
@@ -74,7 +78,7 @@ export const Footer: React.FC = () => {
                 <Phone className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-xs text-neutral-400 block">Llamadas directas</span>
+                <span className="text-xs text-neutral-400 block">{t.footer.phoneLabel}</span>
                 <a
                   href={`tel:${COMPANY_CONFIG.phone.raw}`}
                   className="text-sm font-bold text-white hover:underline transition-colors"
@@ -90,7 +94,7 @@ export const Footer: React.FC = () => {
                 <MessageSquare className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-xs text-neutral-400 block">WhatsApp de cotizaciones</span>
+                <span className="text-xs text-neutral-400 block">{t.footer.whatsappLabel}</span>
                 <a
                   href={`https://wa.me/${COMPANY_CONFIG.whatsapp.number.replace(/[^0-9]/g, "")}`}
                   target="_blank"
@@ -109,7 +113,7 @@ export const Footer: React.FC = () => {
                 <Mail className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-xs text-neutral-400 block">Correo corporativo</span>
+                <span className="text-xs text-neutral-400 block">{t.footer.emailLabel}</span>
                 <a
                   href={`mailto:${COMPANY_CONFIG.email}`}
                   className="text-sm font-bold text-white hover:underline transition-colors"
@@ -123,9 +127,9 @@ export const Footer: React.FC = () => {
 
         {/* Barra de Copyright */}
         <div className="mt-16 pt-8 border-t border-white/10 text-xs text-neutral-400 font-body flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {currentYear} CRICASA. Todos los derechos reservados.</p>
+          <p>© {currentYear} CRICASA. {t.footer.rights}</p>
           <p className="text-neutral-400">
-            Empresa familiar de mudanzas y transporte con más de 30 años de trayectoria.
+            {t.footer.familyFooter}
           </p>
         </div>
       </div>

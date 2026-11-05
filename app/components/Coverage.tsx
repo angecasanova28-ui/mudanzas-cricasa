@@ -1,9 +1,13 @@
+"use client";
+
 import React from "react";
 import { MapPin, Navigation, CheckCircle2, MessageCircle } from "lucide-react";
-import { COVERAGE_CONFIG } from "../config/company";
 import { buildWhatsAppGeneralUrl } from "../config/whatsapp";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Coverage: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="cobertura" className="py-24 lg:py-32 bg-white text-[#101010] border-b border-neutral-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,20 +15,20 @@ export const Coverage: React.FC = () => {
           {/* Columna de Texto y Zonas */}
           <div className="lg:col-span-7">
             <span className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-3 block font-body">
-              Alcance Logístico
+              {t.coverage.badge}
             </span>
 
             <h2 className="font-display text-4xl sm:text-6xl lg:text-7xl text-[#101010] tracking-wide uppercase leading-tight mb-6">
-              {COVERAGE_CONFIG.title}
+              {t.coverage.title}
             </h2>
 
             <p className="font-body text-neutral-600 text-base sm:text-lg leading-relaxed mb-8">
-              {COVERAGE_CONFIG.subtitle}
+              {t.coverage.subtitle}
             </p>
 
             {/* Listado de Zonas en tarjetas #F4F4F4 con bordes definidos */}
             <div className="space-y-6 font-body">
-              {COVERAGE_CONFIG.zones.map((zone, zIdx) => (
+              {t.coverage.zones.map((zone, zIdx) => (
                 <div
                   key={zIdx}
                   className="p-6 rounded-2xl bg-[#F4F4F4] border border-neutral-200"
@@ -58,7 +62,7 @@ export const Coverage: React.FC = () => {
             </div>
 
             <p className="mt-6 text-xs text-neutral-400 italic font-body">
-              * {COVERAGE_CONFIG.note}
+              * {t.coverage.note}
             </p>
           </div>
 
@@ -71,38 +75,38 @@ export const Coverage: React.FC = () => {
                 </div>
 
                 <h3 className="font-display text-3xl sm:text-4xl text-white mb-3 uppercase tracking-wide">
-                  ¿SU DESTINO NO FIGURA EN LA LISTA?
+                  {t.coverage.notListedTitle}
                 </h3>
 
                 <p className="text-neutral-400 text-sm leading-relaxed mb-6">
-                  Coordinamos con frecuencia rutas especiales y traslados punto a punto con reserva anticipada. Consúltenos directamente indicando su origen y destino.
+                  {t.coverage.notListedDesc}
                 </p>
 
                 <div className="space-y-3 mb-8 text-xs text-neutral-300">
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                    <span>Evaluación de ruta y accesibilidad</span>
+                    <span>{t.coverage.point1}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                    <span>Reserva confirmada de fecha y horario</span>
+                    <span>{t.coverage.point2}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                    <span>Atención y asesoramiento sin intermediarios</span>
+                    <span>{t.coverage.point3}</span>
                   </div>
                 </div>
 
                 <a
                   href={buildWhatsAppGeneralUrl(
-                    "Hola CRICASA, quisiera consultar si tienen disponibilidad y cobertura para un traslado entre mis localidades."
+                    t.coverage.ctaBtn
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white hover:bg-neutral-200 text-black font-extrabold text-xs uppercase tracking-wider transition-all duration-200 shadow-md"
                 >
                   <MessageCircle className="w-4 h-4 text-black" />
-                  <span>Consultar por mi localidad</span>
+                  <span>{t.coverage.ctaBtn}</span>
                 </a>
               </div>
             </div>
