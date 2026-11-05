@@ -18,7 +18,7 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -30,49 +30,49 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#101010]/95 backdrop-blur-md border-b border-white/10 py-3 shadow-lg shadow-black/40"
+          ? "bg-[#101010]/95 backdrop-blur-md border-b border-white/10 py-3 shadow-xl shadow-black/50"
           : "bg-[#101010] py-4 border-b border-white/5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo oficial de Mudanzas CRICASA */}
+        <div className="flex items-center justify-between h-12">
+          {/* CRICASA a la izquierda */}
           <a
             href="#hero"
             aria-label="Inicio Mudanzas CRICASA"
-            className="focus:outline-none focus-visible:ring-1 focus-visible:ring-white rounded py-1"
+            className="focus:outline-none focus-visible:ring-1 focus-visible:ring-white rounded py-1 flex items-center"
           >
             <Logo variant="dark" size="md" />
           </a>
 
-          {/* Navegación de escritorio sobria y elegante */}
+          {/* Enlaces horizontales: Inicio, Servicios, Nosotros, Cobertura, Contacto */}
           <nav
             aria-label="Navegación principal"
-            className="hidden md:flex items-center space-x-8"
+            className="hidden md:flex items-center space-x-7 lg:space-x-8"
           >
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-xs font-semibold tracking-wider uppercase text-neutral-300 hover:text-white transition-colors duration-200 relative py-1"
+                className="text-xs font-bold tracking-widest uppercase text-neutral-300 hover:text-white transition-colors duration-200 relative py-1"
               >
                 {link.name}
               </a>
             ))}
           </nav>
 
-          {/* Botón CTA Destacado Blanco y Negro */}
+          {/* Botón blanco 'Solicitar presupuesto' a la derecha */}
           <div className="hidden lg:flex items-center">
             <a
               href="#presupuesto"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-extrabold uppercase tracking-wider transition-all duration-200 shadow-md transform hover:-translate-y-0.5"
             >
               <span>Solicitar presupuesto</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 text-black" />
             </a>
           </div>
 
-          {/* Botón Hamburguesa Móvil */}
+          {/* Menú móvil */}
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
