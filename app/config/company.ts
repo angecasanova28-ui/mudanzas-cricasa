@@ -198,6 +198,11 @@ export const COVERAGE_CONFIG: {
       description: "Servicios programados y traslados de media y larga distancia con reserva previa.",
       featuredAreas: ["Localidades de Santa Fe", "Corredor regional", "Barrios cerrados y countries"],
     },
+    {
+      region: "Larga Distancia",
+      description: "Mudanzas y traslados punto a punto hacia el resto del país y países limítrofes, con logística dedicada y programación exclusiva.",
+      featuredAreas: ["Resto del país", "Países limítrofes", "Traslados exclusivos", "Coordinación logística"],
+    },
   ],
 };
 
